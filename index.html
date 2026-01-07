@@ -20,7 +20,15 @@
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
 
 <div id="scrollVideoWrapper">
-  <video id="scrollVideo" src="ab_vid.mp4" muted autoplay loop playsinline preload="auto" > </video>
+  <video id="scrollVideo" src="ab_vid.mp4" muted autoplay loop playsinline preload="auto" poster="fallback.jpg"> 
+<!-- mobile first -->
+  <source src="bg-video-mobile.mp4" type="video/mp4">
+
+  <!-- desktop fallback -->
+  <source src="bg-video-optimized.mp4" type="video/mp4">
+</video>
+
+  </video>
 </div>
 
 <div class="grain-overlay"></div>
