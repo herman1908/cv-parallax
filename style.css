@@ -1,0 +1,330 @@
+/* Parallax backgrounds */
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+}
+
+/* Parallax ke 2 image backgrounds */
+/* .p1 {background-image:url('https://images.unsplash.com/photo-1522199755839-a2bacb67c546?auto=format&fit=crop&w=1600&q=60');}
+.p2 {background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=60');}
+.p3 {background-image:url('https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=1600&q=60');} */
+
+.section {
+  padding: 60px 10%;
+}
+
+.card-custom{
+  background: rgba(255, 255, 255, .48);   /* 70% transparan */
+  border-radius: 14px;
+  padding: 16px 18px;
+  backdrop-filter: blur(12px);            /* efek kaca */
+  border: 1px solid rgba(255,255,255,.45);
+  box-shadow: 
+      8px  10px 25px rgba(0,0,0,.12),
+      -6px -6px 18px rgba(255,255,255,.35) inset;
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+
+
+.section-title{
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.parallax-title{
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+
+
+
+@media (max-width: 768px){
+  .parallax{background-attachment: scroll;}
+}
+
+#profileImg {
+  transition: transform .2s linear;
+	}
+  .bg-person{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;        /* atur sesuai kebutuhan */
+  opacity: .15;        /* transparan agar tidak mengganggu */
+  pointer-events: none; /* tidak bisa diklik */
+  transform: translate(-50%, -50%);
+  z-index: -1;         /* di belakang semua konten */
+  transition: transform .15s linear;
+}
+
+/* untuk dark mode — sedikit lebih gelap */
+.dark .bg-person{
+  opacity: .08;
+}
+
+
+#rotatingBg{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -2;          /* di balik semua konten */
+  pointer-events: none; /* tidak bisa diklik */
+}
+
+#rotatingBg img{
+  width: 900px;         /* sesuaikan */
+  opacity: .12;
+  transition: transform .15s linear;
+}
+
+/* lebih redup saat dark mode */
+.dark #rotatingBg img{
+  opacity: .06;
+}
+
+.p1, .p2, .p3 {
+  background-image: none;   /* hilangkan gambar lama */
+  background: linear-gradient(
+      rgba(0,0,0,.45),
+      rgba(0,0,0,.45)
+  );
+}
+
+/* Parallax ke 2 image backgrounds */
+/* efek parallax : background-attachment: fixed;*/
+.parallax {
+  /* background-image: url("ab_copy.jpg"); */
+  min-height: 450px;
+  
+  background: linear-gradient(
+      rgba(0,0,0,.35),
+      rgba(0,0,0,.35)
+  );
+  background-position: center;
+  background-attachment: fixed;   
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  z-index: 1;
+}
+
+/* lapisan gelap saat dark mode */
+.dark .parallax::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+
+.dark body {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+#spinBackground{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -2;
+  pointer-events: none;
+}
+
+#spinBackground img{
+  width: 900px;
+  opacity: .12;
+  transform-origin: center	 center;
+  transition: transform .1s linear;
+}
+
+.dark #spinBackground img{
+  opacity: .07;
+}
+
+@media (max-width: 768px){
+  #spinBackground img{
+    width: 520px;
+    opacity: .09;
+  }
+}
+
+#scrollVideoWrapper{
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: -2;
+  pointer-events: none;
+  will-change: transform;
+}
+
+#scrollVideo{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(.75); /* boleh diubah */
+}
+.dark #scrollVideo{
+  filter: brightness(.55);
+}
+
+/* text dan text box tetap solid di card-custom */
+.card-custom input,
+.card-custom textarea,
+.card-custom select{
+  background: #ffffff !important;
+  color: #111;
+}
+
+.dark .card-custom input,
+.dark .card-custom textarea,
+.dark .card-custom select{
+  background: #0b1223 !important;
+  color: #e5e7eb;
+}
+
+/* Khusus mobile */
+
+
+@media (max-width: 768px){
+  .card-custom{
+    padding: 14px 14px;
+  }
+
+  #scrollVideo{
+    object-position: center;
+  }
+}
+.card-custom:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 35px 55px rgba(0,0,0,.15);
+}
+
+.card-custom::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16%;
+  background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0));
+  pointer-events: none;
+}
+
+.dark .card-custom{
+  background: rgba(15, 23, 42, .48);
+  border: 1px solid rgba(255,255,255,.15);
+
+  box-shadow:
+      8px 10px 25px rgba(0,0,0,.45),
+      -6px -6px 18px rgba(255,255,255,.05) inset;
+}
+
+.dark .card-custom::before{
+  background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,0));
+}
+
+.card-custom:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 35px 55px rgba(0,0,0,.18);
+}
+
+.card-custom{
+  opacity: 0;
+  transform: translateY(25px);
+}
+
+.card-custom.show-card{
+  opacity: 1;
+  transform: translateY(0);
+  transition: .45s ease;
+}
+
+#scrollVideo{
+  opacity: 0;
+  transition: opacity .9s ease;
+}
+
+.video-ready #scrollVideo{
+  opacity: 1;
+}
+
+.nav-link.active{
+  color: #0ea5e9 !important;
+  font-weight: 600;
+}
+
+body.no-video #scrollVideoWrapper{
+  display: none;
+}
+
+body.no-video{
+  background: #0f172a;
+}
+
+/* cinematic grain */
+.grain-overlay{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: .18;
+  mix-blend-mode: overlay;
+
+  /* Noise generator (tanpa file) */
+  background-image: url("data:image/svg+xml;utf8,\<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'>\<filter id='n'>\<feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/>\</filter>\<rect width='160' height='160' filter='url(%23n)' opacity='0.4'/>\</svg>");
+
+  animation: grainMove 6s steps(10) infinite;
+}
+
+.dark .grain-overlay{
+  opacity: .12;
+}
+
+
+@keyframes grainMove{
+  0%{ transform: translate(0,0); }
+  25%{ transform: translate(-10px, 8px); }
+  50%{ transform: translate(6px, -12px); }
+  75%{ transform: translate(-4px, 6px); }
+  100%{ transform: translate(0,0); }
+}
+
+.dark .grain-overlay{
+  opacity: .12;
+}
+
+.hero-animate{
+  opacity: 0;
+  transform: translateY(24px);
+  animation: heroIn .9s ease forwards;
+}
+
+@keyframes heroIn{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-breath{
+  animation: breath 2.8s ease-in-out infinite;
+}
+
+@keyframes breath{
+  0%,100%{ transform: scale(1); box-shadow: 0 0 0 rgba(14,165,233,0); }
+  50%{ transform: scale(1.04); box-shadow: 0 10px 25px rgba(14,165,233,.25); }
+}
