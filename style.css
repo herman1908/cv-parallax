@@ -173,9 +173,12 @@
 }
 
 #scrollVideo{
+  position: fixed;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: -1;
    display: block;
   filter: brightness(.75); /* boleh diubah */
 }

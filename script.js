@@ -182,3 +182,22 @@ document.addEventListener("visibilitychange", ()=>{
   document.hidden ? "paused" : "running";
 });
 
+const scrollVideo = document.getElementById("scrollVideo");
+
+function startVideo() {
+  if (scrollVideo.paused) {
+    scrollVideo.play().catch(() => {});
+  }
+}
+
+window.addEventListener("touchstart", startVideo, { once: true });
+window.addEventListener("scroll", startVideo, { once: true });
+
+window.addEventListener("scroll", () => {
+  const max = document.body.scrollHeight - window.innerHeight;
+  const progress = window.scrollY / max;
+
+  scrollVideo.currentTime =
+    progress * (scrollVideo.duration || 0);
+});
+
