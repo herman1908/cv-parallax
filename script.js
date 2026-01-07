@@ -18,6 +18,25 @@ form?.addEventListener("submit", (e) => {
   form.reset();
 });
 
+
+function unlockVideo(){
+  if (!video) return;
+
+  video.muted = true;
+
+  video.play().then(()=>{
+    video.pause();
+
+    // lepas listener setelah berhasil
+    window.removeEventListener("touchstart", unlockVideo);
+    window.removeEventListener("click", unlockVideo);
+  }).catch(()=>{});
+}
+
+// iOS/Android butuh satu tap dulu
+window.addEventListener("touchstart", unlockVideo, { once:true });
+window.addEventListener("click", unlockVideo, { once:true });
+
 // ===============================
 // VIDEO SCROLL-CONTROL
 // ===============================
@@ -30,11 +49,17 @@ let currentTime = 0;
 
 video.addEventListener("loadedmetadata", () => {
   duration = video.duration;
-});
-
-video.addEventListener("loadeddata", () => {
   document.body.classList.add("video-ready");
 });
+
+// video.addEventListener("loadeddata", () => {
+//   document.body.classList.add("video-ready");
+// });
+
+video.addEventListener("loadedmetadata", ()=>{
+  try { video.currentTime = 0.01; } catch(e){}
+});
+
 
 
 // ZOOM PARAMETERS
