@@ -145,13 +145,15 @@ window.addEventListener("scroll", () => {
   let current = "";
 
   sections.forEach(sec => {
-    const top = window.scrollY;
-    const offset = sec.offsetTop - 120;
-    const height = sec.offsetHeight;
+     const max = document.body.scrollHeight - window.innerHeight;
+  const progress = Math.min(1, Math.max(0, window.scrollY / max));
 
-    if (top >= offset && top < offset + height){
-      current = sec.getAttribute("id");
-    }
+  // playback rate mengikuti scroll
+  video.playbackRate = 0.5 + progress * 1.0;
+
+  // kenakan efek zoom & brightness
+  const scale = 1 + progress * 0.15;
+  video.style.transform = `scale(${scale})`;
   });
 
   navLinks.forEach(link =>{
