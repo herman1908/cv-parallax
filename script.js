@@ -23,15 +23,19 @@ function unlockVideo(){
   if (!video) return;
 
   video.muted = true;
+  video.playsInline = true;
 
   video.play().then(()=>{
-    video.pause();
 
-    // lepas listener setelah berhasil
+    // berjalan sangat lambat → praktis "diam"
+    video.playbackRate = 0.00001;
+
     window.removeEventListener("touchstart", unlockVideo);
     window.removeEventListener("click", unlockVideo);
+
   }).catch(()=>{});
 }
+
 
 // iOS/Android butuh satu tap dulu
 window.addEventListener("touchstart", unlockVideo, { once:true });
