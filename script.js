@@ -19,53 +19,50 @@ form?.addEventListener("submit", (e) => {
 });
 
 
+function unlockVideo(){
+  if (!video) return;
+
+  video.muted = true;
+  video.playsInline = true;
+
+  video.play().then(()=>{
+
+    // berjalan sangat lambat → praktis "diam"
+    video.playbackRate = 0.00001;
+
+    window.removeEventListener("touchstart", unlockVideo);
+    window.removeEventListener("click", unlockVideo);
+
+  }).catch(()=>{});
+}
+
+
+// iOS/Android butuh satu tap dulu
+window.addEventListener("touchstart", unlockVideo, { once:true });
+window.addEventListener("click", unlockVideo, { once:true });
+
 // ===============================
 // VIDEO SCROLL-CONTROL
 // ===============================
-// const video = document.getElementById("scrollVideo");
-// const videoWrapper = document.getElementById("scrollVideoWrapper");
+const video = document.getElementById("scrollVideo");
+const videoWrapper = document.getElementById("scrollVideoWrapper");
 
-// let duration = 0;
-// let targetTime = 0;
-// let currentTime = 0;
+let duration = 0;
+let targetTime = 0;
+let currentTime = 0;
 
 video.addEventListener("loadedmetadata", () => {
   duration = video.duration;
   document.body.classList.add("video-ready");
 });
 
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-// MOBILE VIDEO MODE (autoplay background)
-if (isMobile) {
-
-  console.log("Mobile mode: autoplay simple video");
-
-  video.muted = true;
-  video.loop = true;
-  video.playsInline = true;
-
-  video.play().catch(() => {});
-
-  // Small cinematic zoom only
-  window.addEventListener("scroll", () => {
-    const p = window.scrollY / (document.body.scrollHeight - innerHeight);
-    const scale = 1 + (p * 0.12);
-    video.style.transform = `scale(${scale})`;
-  });
-
-}
-
-
-
-
 // video.addEventListener("loadeddata", () => {
 //   document.body.classList.add("video-ready");
 // });
 
-// video.addEventListener("loadedmetadata", ()=>{
-//   try { video.currentTime = 0.01; } catch(e){}
-// });
+video.addEventListener("loadedmetadata", ()=>{
+  try { video.currentTime = 0.01; } catch(e){}
+});
 
 
 
@@ -88,7 +85,7 @@ window.addEventListener("scroll", () => {
   progress = Math.min(1, Math.max(0, progress));
 
   // target waktu video
-  // targetTime  = progress * duration;
+  targetTime  = progress * duration;
 
   // target zoom
   targetScale = MIN_SCALE + (progress * MAX_EXTRA);
@@ -100,12 +97,12 @@ window.addEventListener("scroll", () => {
 
 
 // SMOOTH VIDEO SEEK
-// function smoothVideo() {
-//   currentTime += (targetTime - currentTime) * 0.12;
-//   video.currentTime = currentTime;
-//   requestAnimationFrame(smoothVideo);
-// }
-// smoothVideo();
+function smoothVideo() {
+  currentTime += (targetTime - currentTime) * 0.12;
+  video.currentTime = currentTime;
+  requestAnimationFrame(smoothVideo);
+}
+smoothVideo();
 
 // SMOOTH ZOOM
 function smoothZoom(){
@@ -152,7 +149,7 @@ window.addEventListener("scroll", () => {
   const progress = Math.min(1, Math.max(0, window.scrollY / max));
 
   // playback rate mengikuti scroll
-  // video.playbackRate = 0.5 + progress * 1.0;
+  video.playbackRate = 0.5 + progress * 1.0;
 
   // kenakan efek zoom & brightness
   const scale = 1 + progress * 0.15;
@@ -185,7 +182,7 @@ document.addEventListener("visibilitychange", ()=>{
   document.hidden ? "paused" : "running";
 });
 
-// const scrollVideo = document.getElementById("scrollVideo");
+const scrollVideo = document.getElementById("scrollVideo");
 
 function startVideo() {
    scrollVideo.muted = true;
@@ -205,20 +202,6 @@ window.addEventListener("scroll", () => {
   
 });
 
-if (isMobile) {
-  video.muted = true;
-  video.loop = true;
-
-  video.play().catch(()=>{});
-
-  // pelan, biar terasa cinematic
-  // video.playbackRate = 0.6;
-
-  // HENTIKAN semua logika scroll-sync untuk mobile
-  console.log("Mobile mode active — using autoplay background video");
-}
-
-
 let lastScrollY = 0;
 
 window.addEventListener("scroll", () => {
@@ -231,9 +214,9 @@ window.addEventListener("scroll", () => {
   // batasi supaya halus
   speed = Math.max(-1.5, Math.min(1.5, speed));
 
-  // scrollVideo.playbackRate = 1 + speed;
+  scrollVideo.playbackRate = 1 + speed;
 
-  // lastScrollY = window.scrollY;
+  lastScrollY = window.scrollY;
 });
 
 
@@ -242,7 +225,7 @@ let currentRate = 1;
 
 function animateRate(){
   currentRate += (targetRate - currentRate) * 0.1;
-  // scrollVideo.playbackRate = currentRate;
+  scrollVideo.playbackRate = currentRate;
   requestAnimationFrame(animateRate);
 }
 animateRate();
@@ -254,6 +237,38 @@ window.addEventListener("scroll", () => {
 });
 
 
+// const video = document.getElementById("scrollVideo");
+const overlay = document.getElementById("enableVideoOverlay");
+
+overlay.addEventListener("click", async () => {
+
+  try {
+    video.muted = true;
+    await video.play();        // ← sekarang dianggap gesture sah
+  } catch(e){}
+
+  overlay.classList.add("hidden");
+});
+
+// ——— USER TAP ONCE (WAJIB DI MOBILE) ———
+overlay?.addEventListener("click", async () => {
+
+  // always remove overlay (desktop safe)
+  overlay.classList.add("hidden");
+
+  try {
+    video.muted = true;
+    await video.play();
+    video.pause();
+  } catch(e) {
+    // ignore — scrolling will still work when allowed
+  }
+});
+
+// hide overlay on desktop — only mobile needs it
+if (window.innerWidth > 900) {
+  overlay?.classList.add("hidden");
+}
 
 
 
@@ -264,7 +279,7 @@ window.addEventListener("scroll", () => {
   const max = document.body.scrollHeight - innerHeight;
   const progress = Math.min(1, Math.max(0, scrollY / max));
 
-  // targetTime = progress * duration;
+  targetTime = progress * duration;
 
   // parallax + cinematic zoom
   const offset = scrollY * 0.25;
@@ -278,12 +293,12 @@ window.addEventListener("scroll", () => {
 });
 
 // ——— SMOOTH SEEK ———
-// function smoothSeek(){
-//   currentTime += (targetTime - currentTime) * 0.12;
-//   if (duration) video.currentTime = currentTime;
-//   requestAnimationFrame(smoothSeek);
-// }
-// smoothSeek();
+function smoothSeek(){
+  currentTime += (targetTime - currentTime) * 0.12;
+  if (duration) video.currentTime = currentTime;
+  requestAnimationFrame(smoothSeek);
+}
+smoothSeek();
 
 // ——— TAB VISIBILITY ———
 document.addEventListener("visibilitychange", () => {
