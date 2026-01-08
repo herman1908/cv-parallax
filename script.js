@@ -22,12 +22,12 @@ form?.addEventListener("submit", (e) => {
 // ===============================
 // VIDEO SCROLL-CONTROL
 // ===============================
-const video = document.getElementById("scrollVideo");
-const videoWrapper = document.getElementById("scrollVideoWrapper");
+// const video = document.getElementById("scrollVideo");
+// const videoWrapper = document.getElementById("scrollVideoWrapper");
 
-let duration = 0;
-let targetTime = 0;
-let currentTime = 0;
+// let duration = 0;
+// let targetTime = 0;
+// let currentTime = 0;
 
 video.addEventListener("loadedmetadata", () => {
   duration = video.duration;
@@ -63,9 +63,9 @@ if (isMobile) {
 //   document.body.classList.add("video-ready");
 // });
 
-video.addEventListener("loadedmetadata", ()=>{
-  try { video.currentTime = 0.01; } catch(e){}
-});
+// video.addEventListener("loadedmetadata", ()=>{
+//   try { video.currentTime = 0.01; } catch(e){}
+// });
 
 
 
@@ -88,7 +88,7 @@ window.addEventListener("scroll", () => {
   progress = Math.min(1, Math.max(0, progress));
 
   // target waktu video
-  targetTime  = progress * duration;
+  // targetTime  = progress * duration;
 
   // target zoom
   targetScale = MIN_SCALE + (progress * MAX_EXTRA);
@@ -100,12 +100,12 @@ window.addEventListener("scroll", () => {
 
 
 // SMOOTH VIDEO SEEK
-function smoothVideo() {
-  currentTime += (targetTime - currentTime) * 0.12;
-  video.currentTime = currentTime;
-  requestAnimationFrame(smoothVideo);
-}
-smoothVideo();
+// function smoothVideo() {
+//   currentTime += (targetTime - currentTime) * 0.12;
+//   video.currentTime = currentTime;
+//   requestAnimationFrame(smoothVideo);
+// }
+// smoothVideo();
 
 // SMOOTH ZOOM
 function smoothZoom(){
@@ -152,7 +152,7 @@ window.addEventListener("scroll", () => {
   const progress = Math.min(1, Math.max(0, window.scrollY / max));
 
   // playback rate mengikuti scroll
-  video.playbackRate = 0.5 + progress * 1.0;
+  // video.playbackRate = 0.5 + progress * 1.0;
 
   // kenakan efek zoom & brightness
   const scale = 1 + progress * 0.15;
@@ -185,7 +185,7 @@ document.addEventListener("visibilitychange", ()=>{
   document.hidden ? "paused" : "running";
 });
 
-const scrollVideo = document.getElementById("scrollVideo");
+// const scrollVideo = document.getElementById("scrollVideo");
 
 function startVideo() {
    scrollVideo.muted = true;
@@ -212,7 +212,7 @@ if (isMobile) {
   video.play().catch(()=>{});
 
   // pelan, biar terasa cinematic
-  video.playbackRate = 0.6;
+  // video.playbackRate = 0.6;
 
   // HENTIKAN semua logika scroll-sync untuk mobile
   console.log("Mobile mode active — using autoplay background video");
@@ -231,9 +231,9 @@ window.addEventListener("scroll", () => {
   // batasi supaya halus
   speed = Math.max(-1.5, Math.min(1.5, speed));
 
-  scrollVideo.playbackRate = 1 + speed;
+  // scrollVideo.playbackRate = 1 + speed;
 
-  lastScrollY = window.scrollY;
+  // lastScrollY = window.scrollY;
 });
 
 
@@ -242,7 +242,7 @@ let currentRate = 1;
 
 function animateRate(){
   currentRate += (targetRate - currentRate) * 0.1;
-  scrollVideo.playbackRate = currentRate;
+  // scrollVideo.playbackRate = currentRate;
   requestAnimationFrame(animateRate);
 }
 animateRate();
@@ -264,7 +264,7 @@ window.addEventListener("scroll", () => {
   const max = document.body.scrollHeight - innerHeight;
   const progress = Math.min(1, Math.max(0, scrollY / max));
 
-  targetTime = progress * duration;
+  // targetTime = progress * duration;
 
   // parallax + cinematic zoom
   const offset = scrollY * 0.25;
@@ -278,12 +278,12 @@ window.addEventListener("scroll", () => {
 });
 
 // ——— SMOOTH SEEK ———
-function smoothSeek(){
-  currentTime += (targetTime - currentTime) * 0.12;
-  if (duration) video.currentTime = currentTime;
-  requestAnimationFrame(smoothSeek);
-}
-smoothSeek();
+// function smoothSeek(){
+//   currentTime += (targetTime - currentTime) * 0.12;
+//   if (duration) video.currentTime = currentTime;
+//   requestAnimationFrame(smoothSeek);
+// }
+// smoothSeek();
 
 // ——— TAB VISIBILITY ———
 document.addEventListener("visibilitychange", () => {
