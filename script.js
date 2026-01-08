@@ -185,9 +185,8 @@ document.addEventListener("visibilitychange", ()=>{
 const scrollVideo = document.getElementById("scrollVideo");
 
 function startVideo() {
-  if (scrollVideo.paused) {
-    scrollVideo.play().catch(() => {});
-  }
+   scrollVideo.muted = true;
+  scrollVideo.play().catch(()=>{});
 }
 
 window.addEventListener("touchstart", startVideo, { once: true });
@@ -197,7 +196,44 @@ window.addEventListener("scroll", () => {
   const max = document.body.scrollHeight - window.innerHeight;
   const progress = window.scrollY / max;
 
-  scrollVideo.currentTime =
-    progress * (scrollVideo.duration || 0);
+  // scrollVideo.currentTime =
+  //   progress * (scrollVideo.duration || 0);
+
+  
 });
+
+let lastScrollY = 0;
+
+window.addEventListener("scroll", () => {
+
+  const delta = window.scrollY - lastScrollY;
+
+  // kecepatan berdasarkan arah & jarak scroll
+  let speed = delta * 0.01;
+
+  // batasi supaya halus
+  speed = Math.max(-1.5, Math.min(1.5, speed));
+
+  scrollVideo.playbackRate = 1 + speed;
+
+  lastScrollY = window.scrollY;
+});
+
+
+let targetRate = 1;
+let currentRate = 1;
+
+function animateRate(){
+  currentRate += (targetRate - currentRate) * 0.1;
+  scrollVideo.playbackRate = currentRate;
+  requestAnimationFrame(animateRate);
+}
+animateRate();
+
+window.addEventListener("scroll", () => {
+  const delta = window.scrollY - lastScrollY;
+  targetRate = 1 + Math.max(-1.2, Math.min(1.2, delta * 0.01));
+  lastScrollY = window.scrollY;
+});
+
 
