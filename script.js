@@ -19,28 +19,6 @@ form?.addEventListener("submit", (e) => {
 });
 
 
-function unlockVideo(){
-  if (!video) return;
-
-  video.muted = true;
-  video.playsInline = true;
-
-  video.play().then(()=>{
-
-    // berjalan sangat lambat → praktis "diam"
-    video.playbackRate = 0.00001;
-
-    window.removeEventListener("touchstart", unlockVideo);
-    window.removeEventListener("click", unlockVideo);
-
-  }).catch(()=>{});
-}
-
-
-// iOS/Android butuh satu tap dulu
-window.addEventListener("touchstart", unlockVideo, { once:true });
-window.addEventListener("click", unlockVideo, { once:true });
-
 // ===============================
 // VIDEO SCROLL-CONTROL
 // ===============================
@@ -55,6 +33,31 @@ video.addEventListener("loadedmetadata", () => {
   duration = video.duration;
   document.body.classList.add("video-ready");
 });
+
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+// MOBILE VIDEO MODE (autoplay background)
+if (isMobile) {
+
+  console.log("Mobile mode: autoplay simple video");
+
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
+
+  video.play().catch(() => {});
+
+  // Small cinematic zoom only
+  window.addEventListener("scroll", () => {
+    const p = window.scrollY / (document.body.scrollHeight - innerHeight);
+    const scale = 1 + (p * 0.12);
+    video.style.transform = `scale(${scale})`;
+  });
+
+}
+
+
+
 
 // video.addEventListener("loadeddata", () => {
 //   document.body.classList.add("video-ready");
@@ -251,38 +254,6 @@ window.addEventListener("scroll", () => {
 });
 
 
-// const video = document.getElementById("scrollVideo");
-const overlay = document.getElementById("enableVideoOverlay");
-
-overlay.addEventListener("click", async () => {
-
-  try {
-    video.muted = true;
-    await video.play();        // ← sekarang dianggap gesture sah
-  } catch(e){}
-
-  overlay.classList.add("hidden");
-});
-
-// ——— USER TAP ONCE (WAJIB DI MOBILE) ———
-overlay?.addEventListener("click", async () => {
-
-  // always remove overlay (desktop safe)
-  overlay.classList.add("hidden");
-
-  try {
-    video.muted = true;
-    await video.play();
-    video.pause();
-  } catch(e) {
-    // ignore — scrolling will still work when allowed
-  }
-});
-
-// hide overlay on desktop — only mobile needs it
-if (window.innerWidth > 900) {
-  overlay?.classList.add("hidden");
-}
 
 
 
@@ -321,4 +292,3 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
