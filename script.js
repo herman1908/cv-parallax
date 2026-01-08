@@ -202,6 +202,20 @@ window.addEventListener("scroll", () => {
   
 });
 
+if (isMobile) {
+  video.muted = true;
+  video.loop = true;
+
+  video.play().catch(()=>{});
+
+  // pelan, biar terasa cinematic
+  video.playbackRate = 0.6;
+
+  // HENTIKAN semua logika scroll-sync untuk mobile
+  console.log("Mobile mode active — using autoplay background video");
+}
+
+
 let lastScrollY = 0;
 
 window.addEventListener("scroll", () => {
@@ -307,3 +321,4 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
